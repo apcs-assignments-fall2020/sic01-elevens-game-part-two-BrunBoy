@@ -51,8 +51,20 @@ public class ElevensBoard extends Board {
      */
     @Override
     public boolean isLegal(List<Integer> selectedCards) {
-        // YOUR CODE HERE
-        return false;
+      int ohMyMeerkats=0;
+      for (int i=0; i<selectedCards.size(); i++){
+        int index=selectedCards.get(i);
+        Card c=cardAt(index);
+        int value=c.getPointValue();
+        ohMyMeerkats+=value;
+      }
+      if (ohMyMeerkats==11&&selectedCards.size()==2){
+        return true;
+      }
+      if (containsJQK(selectedCards)&&selectedCards.size()==3){
+        return true;
+      }
+      return false;
     }
 
     /**
@@ -68,9 +80,12 @@ public class ElevensBoard extends Board {
         // selectedCards is a list of the indexes of
         // all cards on the board
         List<Integer> selectedCards = cardIndexes();
+        if (containsPairSum11(selectedCards)||containsJQK(selectedCards)){
+          return true;
+        }
 
         // YOUR CODE HERE
-        return true;
+        return false;
     }
 
     /**
@@ -82,7 +97,19 @@ public class ElevensBoard extends Board {
      *         otherwise.
      */
     private boolean containsPairSum11(List<Integer> selectedCards) {
-        // YOUR CODE HERE
+        for (int i=0; i<selectedCards.size(); i++){
+          int index=selectedCards.get(i);
+          Card c=cardAt(index);
+          int value=c.getPointValue();
+          for (int j=i+1; j<selectedCards.size(); j++){
+            int holdUp=selectedCards.get(j);
+            Card d=cardAt(holdUp);
+            int result=d.getPointValue();
+            if (value+result==11){
+              return true;
+            }
+          }
+        }
         return false;
     }
 
@@ -95,7 +122,26 @@ public class ElevensBoard extends Board {
      *         and a king; false otherwise.
      */
     private boolean containsJQK(List<Integer> selectedCards) {
-        // YOUR CODE HERE
+      boolean foundJack=false;
+      boolean foundQueen=false;
+      boolean foundKing=false;
+        for (int i=0; i<selectedCards.size(); i++){
+          int index=selectedCards.get(i);
+          Card c=cardAt(index);
+          String value=c.getRank();
+          if (value.equals ("jack")){
+            foundJack=true;
+          }
+          if (value.equals ("queen")){
+            foundQueen=true;
+          }
+          if (value.equals ("king")){
+            foundKing=true;
+          }
+        }
+        if (foundJack&&foundQueen&&foundKing){
+          return true;
+        }
         return false;
     }
 }
